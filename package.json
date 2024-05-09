@@ -1,0 +1,52 @@
+{
+  "name": "keyboardShortcuts",
+  "displayName": "Keyboard Shortcuts for Beginners",
+  "publisher": "DavidLindberg",  
+  "description": "A list of Keyboard Shortcuts for beginners to learn.",
+  "version": "1.1.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "first-test.keyboardShortcuts",
+        "title": "Keyboard Shortcuts"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "first-test.keyboardShortcuts",
+        "key": "shift+alt+k",
+        "mac": "cmd+ctrl+k",
+        "when": "editorTextFocus || explorerViewletVisible || sideBarFocus || editorReadonly || terminalFocus || editorHasSelection"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.8",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "icon": "media/icon_round.png",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "fast-xml-parser": "^4.3.5"
+  }
+}

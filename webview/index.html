@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard shortcuts</title>
+
+    <!-- CSS -->
+    <style>
+        :root {
+            --mainBackground: rgb(103, 103, 106);
+            --secondaryBackground: rgb(26, 26, 27);
+            --mainText: rgb(26, 26, 27);
+            --mainTextActive: rgb(26, 26, 27);
+            --secondaryText: rgb(156, 158, 165);
+
+        }
+
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 1em;
+            color: var(--secondaryText);
+            background-color: var(--secondaryBackground);
+        }
+
+        p {
+            font-size: medium;
+        }
+
+        #commandListContainer {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            max-height: 600px;
+            background-color: var(--secondaryBackground);
+        }
+
+        #commandList {
+            color: var(--mainText);
+            width: 20%;
+            max-width: fit-content;
+            padding: 0;
+            margin: 1em;
+            list-style: none;
+            user-select: none;
+            overflow: auto;
+        }
+
+        #commandList li {
+            -size: smaller;
+            padding: 0.75em;
+            background-color: rgb(156, 158, 165);
+            cursor: pointer;
+        }
+
+        #commandList li:nth-child(2n) {
+            background-color: rgb(126, 127, 131);
+        }
+
+        #imgContainer {
+            width: 70%;
+            height: auto;
+            display: none;
+            flex-direction: column;
+            padding: 1em;
+            background-color: var(--secondaryBackground);
+            color: var(--secondaryText);
+        }
+
+        #imgContainer h2,
+        h3,
+        p {
+            margin: 0.2em 0;
+        }
+
+        #imgContainer img {
+            justify-content: top;
+            border: 2px solid var(--secondaryText);
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        #imgContainer img,
+        p {
+            max-width: 700px;
+        }
+    </style>
+</head>
+
+<!-- HTML -->
+
+<body>
+    <h1>Keyboard shortcuts list</h1>
+    <h4>Remember that keyboard shortcuts can save you alot of time in the long run!</h4>
+    <h3 style="margin-bottom: 1em;">*Click on the commands in the list for more info*</h3>
+
+    <div id="commandListContainer">
+        <ul id="commandList">
+
+        </ul>
+        <div id="imgContainer">
+            <h2 id="commandTitle"></h2>
+            <h3 id="commandKeys"></h3>
+            <p id="commandDesc"></p>
+            <img src="" alt="">
+            <p id="macDisclaimer"></p>
+
+        </div>
+    </div>
+</body>
+
+<!-- JavaScript -->
+<script>
+
+    var commandList = document.querySelector("#commandList");
+    var imgContainer = document.querySelector("#imgContainer");
+    var imgElem = imgContainer.querySelector("img");
+    var commandTitle = document.querySelector("#commandTitle");
+    var commandKeys = document.querySelector("#commandKeys");
+    var commandDesc = document.querySelector("#commandDesc");
+    var inactiveColor = "rgb(0, 0, 0)";
+    var activeColor = "rgb(26, 26, 27, 0.5)";
+    var userOS = window.navigator.platform;
+
+
+    var shortcutItemsList = [
+        {
+            title: 'Copy',
+            command: '[Ctrl + C]',
+            commandMac: '[⌘ + C]',
+            description: 'Copy the selected text',
+            image: '%copy%',
+        },
+        {
+            title: 'Cut',
+            command: '[Ctrl + X]',
+            commandMac: '[⌘ + X]',
+            description: 'Cut the selected text',
+            image: '%cut%',
+        },
+        {
+            title: 'Paste',
+            command: '[Ctrl + V]',
+            commandMac: '[⌘ + V]',
+            description: 'Paste the copied or cut text',
+            image: '%paste%',
+        },
+        {
+            title: 'Undo',
+            command: '[Ctrl + Z]',
+            commandMac: '[⌘ + Z]',
+            description: 'Undo the last action. Useful when you made a mistake and want to revert your last action',
+            image: '%undo%',
+        },
+        {
+            title: 'Redo',
+            command: '[Ctrl + Shift + Z]',
+            commandMac: '[⌘ + ⇧ + Z]',
+            description: 'Redo the last undone action. Useful when you accidentally undo an action and want to reapply it',
+            image: '%redo%',
+        },
+        {
+            title: 'Select Characters',
+            command: '[Shift + Left/Right]',
+            commandMac: '[⇧ + Left/Right]',
+            description: 'Select characters to the left or right. Useful when you want to highlight a specific part of your text for editing',
+            image: '%selectCharacters%',
+        },
+        {
+            title: 'Select Characters by Word',
+            command: '[Ctrl + Shift + Left/Right]',
+            commandMac: '[⌥  + ⇧ + Left/Right]',
+            description: 'Select characters by word to the left or right. Useful when you want to select whole words at a time for faster editing',
+            image: '%selectWords%',
+        },
+        {
+            title: 'Select All',
+            command: '[Ctrl + A]',
+            commandMac: '[⌘ + A]',
+            description: 'Select all of the text in the document. Useful when you want to for example: copy or delete ALL of the text in the document',
+            image: '%selectAll%',
+        },
+        {
+            title: 'Find',
+            command: '[Ctrl + F]',
+            commandMac: '[⌘ + F]',
+            description: 'Find text in the current document. Useful when you want to quickly find a specific word or phrase in the document',
+            image: '%find%',
+        },
+        {
+            title: 'Find and Replace',
+            command: '[Ctrl + H]',
+            commandMac: '[⌥  + ⌘ + F]',
+            description: 'Find and replace text in the current document. Useful when you want to quickly replace a specific word or phrase in the document with another word or phrase',
+            image: '%findReplace%',
+        },
+        {
+            title: 'Auto Indent Code',
+            command: '[Shift + Alt + F]',
+            commandMac: '[⇧ + ⌥  + F]',
+            description: 'Auto indent all of the code in the document. Useful when you want to quickly format the code to make it more readable',
+            image: '%autoIndent%',
+        },
+        {
+            title: 'Move Line Up/Down',
+            command: '[Alt + Up/Down]',
+            commandMac: '[⌥  + Up/Down]',
+            description: 'Move the current line(s) up or down. Useful when you want to quickly rearrange the order of the code in the document',
+            image: '%moveLine%'
+        },
+        {
+            title: 'Copy Line Up/Down',
+            command: '[Shift + Alt + Up/Down]',
+            commandMac: '[⇧ + ⌥  + Up/Down]',
+            description: 'Copy the current line(s) up or down. Useful when you want to quickly duplicate a line of code in the document',
+            image: '%copyLine%'
+        },
+        {
+            title: 'Multi-select Marked Word',
+            command: '[Ctrl + D]',
+            commandMac: '[⌘ + D]',
+            description: 'Multi-selects the next occurrence of the current word. Useful when you want to quickly select multiple instances of the same word in the document',
+            image: '%multiselectWord%'
+        },
+        {
+            title: 'Rename Component',
+            command: '[(Fn) + F2] ',
+            commandMac: '[(Fn) + F2]',
+            description: 'Renames all occurences of the selected component or variable within that function or scope (NOTE: On some computers, the fn key is required to access the F2 key). Useful when you want to quickly rename a component or variable in a function or scope',
+            image: '%renameComponent%'
+        },
+        {
+            title: 'Toggle Word Wrap',
+            command: '[Alt + Z]',
+            commandMac: '[⌥  + Z]',
+            description: 'Fit the code to the window width by wrapping the lines. Useful when you want to view the code without having to scroll horizontally',
+            image: '%wordWrap%',
+        },
+        {
+            title: 'Code to Comment',
+            command: '[Ctrl + K, Ctrl + C]',
+            commandMac: '[⌘ + K, ⌘ + C]',
+            description: 'Makes single line comments of the selected code. Useful when you want to comment out a block of code for testing or debugging purposes',
+            image: '%commentCode%'
+        },
+        {
+            title: 'Comment to Code',
+            command: '[Ctrl + K, Ctrl + U]',
+            commandMac: '[⌘ + K, ⌘ + U]',
+            description: 'Uncomments the code from your selection. Useful when you want to uncomment a block of code that was previously commented out for testing or debugging purposes',
+            image: '%uncommentCode%'
+        },
+    ]
+
+    if (userOS === "Mac68K" || userOS === "MacPPC" || userOS === "MacIntel" || userOS === "Macintosh" || userOS.includes("Mac")) {
+        shortcutItemsList.forEach(shortcut => {
+            commandList.innerHTML += "<li>" + shortcut.title + "<br>" + shortcut.commandMac + "</li>";
+
+        });
+        var macDisclaimer = document.querySelector("#macDisclaimer");
+        macDisclaimer.innerHTML = "*Disclaimer: the key combination shown in the GIF is recorded on Windows and is not accurate to commands on MAC.";
+    } else {
+        shortcutItemsList.forEach(shortcut => {
+            commandList.innerHTML += "<li>" + shortcut.title + "<br>" + shortcut.command + "</li>";
+
+        });
+    }
+
+    var itemsArray = Array.prototype.slice.call(commandList.children);
+    commandList.addEventListener("click", displayCommand);
+
+    function displayCommand(event) {
+
+        // The clicked item index
+        if (itemsArray.indexOf(event.target) === -1) {
+            exit;
+        }
+        var clickedIndex = itemsArray.indexOf(event.target);
+
+        // Set the color of the clicked item to active and the rest to inactive
+        for (const item of itemsArray) {
+            item.style.color = inactiveColor;
+        }
+        if (event.target.getAttribute("id") === "active") {
+
+            event.target.removeAttribute("id");
+            imgContainer.style.display = "none";
+
+        } else {
+
+            for (const item of itemsArray) {
+                item.removeAttribute("id");
+            }
+            event.target.style.color = activeColor;
+            event.target.setAttribute("id", "active");
+
+            // Display GIF with title, command and description
+            commandTitle.innerHTML = shortcutItemsList[clickedIndex].title;
+            if (userOS === "Mac68K" || userOS === "MacPPC" || userOS === "MacIntel" || userOS === "Macintosh" || userOS.includes("Mac")) {
+                commandKeys.innerHTML = shortcutItemsList[clickedIndex].commandMac;
+            } else {
+                commandKeys.innerHTML = shortcutItemsList[clickedIndex].command;
+            }
+            commandDesc.innerHTML = shortcutItemsList[clickedIndex].description;
+            imgContainer.style.display = "flex";
+            var imgURI = shortcutItemsList[clickedIndex].image;
+            imgElem.setAttribute("src", imgURI);
+
+        }
+
+    }
+
+
+
+</script>
+<noscript>Sorry, your browser does not support JavaScript!</noscript>
+
+</html>

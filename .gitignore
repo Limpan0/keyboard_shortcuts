@@ -1,0 +1,14 @@
+.vscode-test
+
+.vscode
+
+.DS_Store
+
+.env
+
+# Ignore node_modules directory
+node_modules
+
+# Ignore the dist directory which contains compiled code
+dist
+
